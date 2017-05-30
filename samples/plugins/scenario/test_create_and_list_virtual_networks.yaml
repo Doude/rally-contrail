@@ -1,0 +1,15 @@
+---
+  config.create_and_list_virtual_networks:
+    -
+      args:
+        virtual_network_create_args: {}
+      runner:
+        type: "constant"
+        times: 100
+        concurrency: 10
+      context:
+        projects:
+          projects: 10
+      sla:
+        failure_rate:
+          max: 0
