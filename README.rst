@@ -16,7 +16,7 @@ directory (or its subdirectories) or by specifying the path from command lines
 as described in the `Rally documentation <http://docs.xrally.xyz/projects/openstack/en/latest/plugins/index.html#placement>`_.
 ::
 
-  $ mkdir -p ~/.rally/plugins
+  $ mkdir -p ~/.rally/plugins && cd ~/.rally/plugins
   $ git clone https://github.com/Doude/rally-contrail-plugin
   Cloning into 'rally-contrail-plugin'...
   remote: Counting objects: 28, done.
@@ -24,7 +24,6 @@ as described in the `Rally documentation <http://docs.xrally.xyz/projects/openst
   remote: Total 28 (delta 4), reused 25 (delta 4), pack-reused 0
   Unpacking objects: 100% (28/28), done.
   Checking connectivity... done.
-  $ cd
 
 Activate the Rally python environment and add ``contrail-api-cli`` python library
 dependency:
@@ -41,7 +40,6 @@ to edit the sample file accordingly to your deployment):
 ::
 
   (rally)$ rally deployment create --name my-contrail-cluster --filename ~/.rally/plugins/rally-contrail-plugin/samples/deployments/contrail.json
-  2017-06-15 14:54:13.142 14259 WARNING rally.task.validation [-] Plugin 'NeutronSecurityGroup.create_and_list_security_group_rules' uses validator 'rally.task.validation.required_services' which is deprecated in favor of 'required_services' (it should be used via new decorator 'rally.common.validation.add') in Rally v0.10.0.
   2017-06-15 14:54:14.257 14259 INFO rally.common.plugin.discover [-] Loading plugins from directories /home/cloud/.rally/plugins/*
   2017-06-15 14:54:14.259 14259 INFO rally.common.plugin.discover [-]      Loaded module with plugins: /home/cloud/.rally/plugins/rally-contrail-plugin/__init__.py
   2017-06-15 14:54:14.259 14259 INFO rally.common.plugin.discover [-]      Loaded module with plugins: /home/cloud/.rally/plugins/rally-contrail-plugin/contrail/__init__.py
@@ -67,7 +65,6 @@ And run scenario test like samples provided:
 ::
 
   (rally)$ rally task start ~/.rally/plugins/rally-contrail-plugin/samples/plugins/scenario/test_create_and_list_virtual_networks.yaml
-  2017-06-15 15:01:18.394 14506 WARNING rally.task.validation [-] Plugin 'NeutronSecurityGroup.create_and_list_security_group_rules' uses validator 'rally.task.validation.required_services' which is deprecated in favor of 'required_services' (it should be used via new decorator 'rally.common.validation.add') in Rally v0.10.0.
   2017-06-15 15:01:19.496 14506 INFO rally.common.plugin.discover [-] Loading plugins from directories /home/cloud/.rally/plugins/*
   2017-06-15 15:01:19.499 14506 INFO rally.common.plugin.discover [-]      Loaded module with plugins: /home/cloud/.rally/plugins/rally-contrail-plugin/__init__.py
   2017-06-15 15:01:19.499 14506 INFO rally.common.plugin.discover [-]      Loaded module with plugins: /home/cloud/.rally/plugins/rally-contrail-plugin/contrail/__init__.py
