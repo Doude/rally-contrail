@@ -47,12 +47,9 @@ class ContrailScenario(scenario.ContrailScenario):
         virtual_network.save()
         return virtual_network
 
-    @atomic.optional_action_timer("config.list_virtual_networks")
+    @atomic.action_timer("config.list_virtual_networks")
     def _list_virtual_networks(self, **kwargs):
         """Return project virtual networks list.
-        :param atomic_action: True if this is an atomic action. added
-                              and handled by the optional_action_timer()
-                              decorator
         :param kwargs: virtual network list options
         """
 
