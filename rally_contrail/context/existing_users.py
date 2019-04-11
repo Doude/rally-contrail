@@ -15,7 +15,7 @@
 from rally.task import context
 
 
-@context.configure(name="existing_users", namespace="contrail", order=99,
+@context.configure(name="existing_users", platform="contrail", order=99,
                    hidden=True)
 class ExistingUsers(context.Context):
     """This context supports using existing users in Rally."""

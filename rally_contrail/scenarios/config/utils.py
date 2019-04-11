@@ -14,14 +14,12 @@
 
 from contrail_api_cli.resource import Collection
 from contrail_api_cli.resource import Resource
-from oslo_config import cfg
 
 from rally.common import logging
 from rally.task import atomic
 
-from contrail import scenario
+from rally_contrail import scenario
 
-CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
 
 
@@ -31,15 +29,16 @@ class ContrailScenario(scenario.ContrailScenario):
     @atomic.action_timer("config.create_virtual_network")
     def _create_virtual_network(self, virtual_network_create_args):
         """Create contrail virtual network.
+
         :param virtual_network_create_args: dict, POST /virtual-networks
                                             request options
-        :returns: contrail virtual network dict
+        :returns: contrail-api-cli virtual network resource
         """
 
         project = self.context['project']
         virtual_network = Resource(
             'virtual-network',
-            # session=self.context['session'],
+            session=self.context['session'],
             parent=project,
             fq_name=list(project.fq_name) + [self.generate_random_name()],
             **virtual_network_create_args
@@ -49,12 +48,15 @@ class ContrailScenario(scenario.ContrailScenario):
 
     @atomic.action_timer("config.list_virtual_networks")
     def _list_virtual_networks(self, **kwargs):
-        """Return project virtual networks list.
+        """Return context project virtual networks list.
+
         :param kwargs: virtual network list options
         """
 
+        kwargs['parent_uuid'] = self.context['project'].uuid
+        kwargs['fetch'] = True
         return Collection(
             'virtual-network',
-            # session=self.context['session'],
+            session=self.context['session'],
             **kwargs
         )

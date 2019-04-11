@@ -12,9 +12,9 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from contrail import scenario
 from rally.task import validation
 
+from rally_contrail import scenario
 import utils
 
 
@@ -23,7 +23,7 @@ import utils
 class CreateAndListVirtualNetworks(utils.ContrailScenario):
 
     def run(self, virtual_network_create_args=None):
-        """Create and list all virtual networks.
+        """Create and list all project virtual networks.
 
         Measure Contrail config API listing virtual networks performance.
         If you have only 1 user in your context, you will
@@ -35,5 +35,6 @@ class CreateAndListVirtualNetworks(utils.ContrailScenario):
         :param virtual_network_create_args: dict, POST /virtual-networks
                                                   request options
         """
+
         self._create_virtual_network(virtual_network_create_args or {})
         self._list_virtual_networks()

@@ -15,9 +15,10 @@
 import functools
 import random
 
+from contrail_api_cli.client import SessionLoader
 from rally.task import scenario
 
-configure = functools.partial(scenario.configure, namespace="contrail")
+configure = functools.partial(scenario.configure, platform="contrail")
 
 
 class ContrailScenario(scenario.Scenario):
@@ -28,7 +29,7 @@ class ContrailScenario(scenario.Scenario):
 
         if context:
             self._choose_project(context)
-            # self._get_api_session(context)
+            self._get_api_session(context)
 
     def _choose_project(self, context):
         """Choose one project from projects context
@@ -48,18 +49,17 @@ class ContrailScenario(scenario.Scenario):
 
         context["project"] = project
 
-    # def _get_api_session(self, context):
-    #     from contrail_api_cli.client import SessionLoader
-    #
-    #     creds = context['admin']['credential']
-    #     context["session"] = SessionLoader().make(
-    #         host=creds.host,
-    #         port=creds.port,
-    #         os_username="fake",
-    #         os_password="fake",
-    #         os_cacert=None,
-    #         os_cert=None,
-    #         os_key=None,
-    #         insecure=False,
-    #         timeout=creds.timeout,
-    #     )
+    def _get_api_session(self, context):
+        creds = context['credential']
+        context["session"] = SessionLoader().make(
+            host=creds.host,
+            port=creds.port,
+            os_username="fake",
+            os_password="fake",
+            os_cacert=None,
+            os_cert=None,
+            os_key=None,
+            insecure=False,
+            timeout=creds.timeout,
+            collect_timing=None,
+        )

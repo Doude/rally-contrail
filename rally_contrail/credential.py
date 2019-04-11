@@ -12,33 +12,40 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+import copy
+
 from contrail_api_cli.client import SessionLoader
 from contrail_api_cli.context import Context
 from contrail_api_cli.schema import DummySchema
 from contrail_api_cli.resource import Collection
+from keystoneauth1.exceptions.connection import ConnectFailure
 
 from rally.common import logging
-from rally.deployment import credential
 from rally import exceptions
 
 LOG = logging.getLogger(__file__)
 
 
-@credential.configure("contrail")
-class ContrailCredential(credential.Credential):
+class ContrailCredential(dict):
     """Credential for Contrail."""
 
-    def __init__(self, host, port, timeout):
-        self.host = host
-        self.port = port
-        self.timeout = timeout
+    def __init__(self, host, port, timeout, **kwargs):
+        if kwargs:
+            raise TypeError("%s" % kwargs)
+        super(ContrailCredential, self).__init__([
+            ('host', host),
+            ('port', port),
+            ('timeout', timeout),
+        ])
+
+    def __getattr__(self, attr, default=None):
+        return self.get(attr, default)
 
     def to_dict(self):
-        return {
-            "host": self.host,
-            "port": self.port,
-            "timeout": self.timeout,
-        }
+        return dict(self)
+
+    def __deepcopy__(self, memodict=None):
+        return self.__class__(**copy.deepcopy(self.to_dict()))
 
     def verify_connection(self):
         Context.session = SessionLoader().make(
@@ -51,10 +58,10 @@ class ContrailCredential(credential.Credential):
             os_key=None,
             insecure=False,
             timeout=self.timeout,
+            collect_timing=None,
         )
         Context().schema = DummySchema()
 
-        from keystoneauth1.exceptions.connection import ConnectFailure
         try:
             Collection('', fetch=True)
         except ConnectFailure as e:
@@ -62,27 +69,3 @@ class ContrailCredential(credential.Credential):
                 LOG.exception(e)
             raise exceptions.RallyException("Unable to connect %s on port %s."
                                             % (self.host, self.port))
-
-
-@credential.configure_builder("contrail")
-class ContrailCredentialBuilder(credential.CredentialBuilder):
-    """Builds credentials provided by existing Cloud config."""
-
-    CONFIG_SCHEMA = {
-        "type": "object",
-        "properties": {
-            "host": {"type": "string"},
-            "port": {"type": "integer"},
-            "timeout": {"type": "integer"},
-        },
-        "required": ["host"],
-        "additionalProperties": False,
-    }
-
-    def build_credentials(self):
-        cred = ContrailCredential(
-            self.config["host"],
-            self.config.get("port", 8082),
-            self.config.get("timeout", 10),
-        )
-        return {"admin": cred.to_dict(), "users": [cred.to_dict()]}
