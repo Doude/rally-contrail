@@ -9,4 +9,5 @@ jobs:
       - run:
           name: run tests
           command: |
+            sudo pip install tox
             tox -epy27
