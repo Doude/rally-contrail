@@ -2,6 +2,9 @@
 Contrail API Rally tests suite
 ==============================
 
+.. image:: https://circleci.com/gh/Doude/rally-contrail/tree/master.svg?style=svg
+  :target: https://circleci.com/gh/Doude/rally-contrail/tree/master
+
 What is it?
 ===========
 This OpenStack Rally plugin adds a new Credential plugin to Rally that directly
