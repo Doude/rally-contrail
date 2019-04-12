@@ -4,6 +4,9 @@ Contrail API Rally tests suite
 
 .. image:: https://circleci.com/gh/Doude/rally-contrail/tree/master.svg?style=svg
   :target: https://circleci.com/gh/Doude/rally-contrail/tree/master
+.. image:: https://coveralls.io/repos/github/Doude/rally-contrail/badge.svg?branch=master
+  :target: https://coveralls.io/github/Doude/rally-contrail?branch=master
+
 
 What is it?
 ===========

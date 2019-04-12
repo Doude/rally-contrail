@@ -2,12 +2,12 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:2.7.16
+      - image: circleci/python:2.7
     working_directory: ~/repo
     steps:
       - checkout
       - run:
-          name: run tests
+          name: run python 2.7 tests and send coverage report
           command: |
             sudo pip install tox
-            tox -epy27
+            tox -ecover-circleci
